@@ -1,17 +1,20 @@
 import axios from "axios";
 
 function Posts({ data }){
-  console.log("data", data);
   return (
-    <h3>hello</h3>
+    <ul>
+    {
+      data.rows && data.rows.map((post,idx)=>(
+        <li key={post.userId}>{ post.userNm }</li>
+      ))
+    }
+    </ul>
   )
 }
 
 export async function getServerSideProps(context) {
   const res = await axios.get("http://localhost:3000/api/posts");
-  // const data = res.data;
-
-  const data = [{ id: "1", title: "hi"}];
+  const data = res.data;
 
   if (!data) {
     return {
@@ -22,11 +25,7 @@ export async function getServerSideProps(context) {
     }
   }
   
-  return {
-    props: {
-      data: data
-    }
-  }
+  return { props: { data: data } }
 }
 
 export default Posts;
